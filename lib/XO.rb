@@ -76,9 +76,17 @@ require 'colorize'
    def who_starts?
      ["player1", "computer"].sample
    end
-   # method to announce if you win/lose
+   # method to announce if you win/lose/draw
    def check
-     puts check_if_win(@@player1) ? "YOU WON!" : "COMPUTER WON!"
+     if check_if_win(@@player1)
+       puts "YOU WON!"
+     elsif check_if_win(@@computer)
+       puts "COMPUTER WON!"
+     elsif @@x == "exit" && @@common.count <= 9
+       puts " "
+     else
+       puts "IT'S A DRAW!"
+     end
    end
 
    # method to define behaviour of AI
@@ -89,31 +97,32 @@ require 'colorize'
    def game_run
      update
      i = 1
-     x = ""
+     @@x = ""
      decide = who_starts?
      if decide == "computer"
        puts "Computer's turn"
-       x = good_to_take
-       turn_second(@@computer, x)
+       @@x = good_to_take
+       turn_second(@@computer, @@x)
        update
      end
 
      while @@common.count <= 8
        puts "Player's turn:"
-       x = good_to_take
-       if x == "exit"
+       @@x = good_to_take
+       if @@x == "exit"
          break
        else
-       turn_first(@@player1, x)
+       turn_first(@@player1, @@x)
        update
        break if check_if_win(@@player1)
        puts "Computer's turn:"
-       x = good_to_take
-       turn_second(@@computer, x)
+       @@x = good_to_take
+       turn_second(@@computer, @@x)
        update
        break if check_if_win(@@computer)
      end
      end
+     check
    end
  end
 
