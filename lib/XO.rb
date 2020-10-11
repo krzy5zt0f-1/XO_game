@@ -11,7 +11,8 @@ require 'colorize'
   # hahs with locations on a grid
   $moves = { top_left: $rows[0][0], top_mid: $rows[0][1], top_right: $rows[0][2],
            mid_left: $rows[2][0], mid_mid: $rows[2][1], mid_right: $rows[2][2],
-          bottom_left: $rows[4][0], bottom_mid: $rows[4][1], bottom_right: $rows[4][2] }
+          bottom_left: $rows[4][0], bottom_mid: $rows[4][1], bottom_right: $rows[4][2],
+          exit: "exit" }
 
 
 # Class that defines and runs a game for PvC
@@ -57,7 +58,7 @@ require 'colorize'
    def good_to_take
      loop do
        input = gets.strip
-       if ($moves.keys - @@common).include?(input.to_sym) || input == "exit"
+       if ($moves.keys - @@common).include?(input.to_sym)
          return input
          break
        end
@@ -67,7 +68,7 @@ require 'colorize'
    def update
      system "clear"
      puts $tic_tac_toe_table
-     #print ($moves.keys - @@common)
+     print ($moves.keys - @@common)
    end
 
    def who_starts?
@@ -85,17 +86,29 @@ require 'colorize'
    # game run
    def game_run
      update
-     for i in 1..4 do
+     i = 1
+     x = ""
+     while i <= 4
        puts "Player's turn:"
-       turn_first(@@player1, good_to_take)
+       x = good_to_take
+       if x == "exit"
+         break
+       else
+       turn_first(@@player1, x)
        update
        puts "Computer's turn:"
-       turn_second(@@computer, good_to_take)
+       x = good_to_take
+       turn_second(@@computer, x)
        update
+       i += 1
      end
+     end
+     if x != "exit"
      puts "Player's turn:"
      turn_first(@@player1, good_to_take)
      update
+   else 
+   end
    end
  end
 
