@@ -91,7 +91,11 @@ require 'colorize'
 
    # method to define behaviour of AI
    def ai
-
+     if @@common.count == 9
+       $moves[:exit]
+     else
+       ($moves.keys - @@common - [:exit]).sample.to_s
+     end
    end
    # game run
    def game_run
@@ -101,11 +105,11 @@ require 'colorize'
      decide = who_starts?
      if decide == "computer"
        puts "Computer's turn"
-       @@x = good_to_take
+       @@x = ai
+       sleep(1)
        turn_second(@@computer, @@x)
        update
      end
-
      while @@common.count <= 8
        puts "Player's turn:"
        @@x = good_to_take
@@ -116,7 +120,8 @@ require 'colorize'
        update
        break if check_if_win(@@player1)
        puts "Computer's turn:"
-       @@x = good_to_take
+       @@x = ai
+       sleep(1)
        turn_second(@@computer, @@x)
        update
        break if check_if_win(@@computer)
