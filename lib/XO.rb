@@ -88,6 +88,14 @@ require 'colorize'
      update
      i = 1
      x = ""
+     decide = who_starts?
+     if decide == "computer"
+       puts "Computer's turn"
+       x = good_to_take
+       turn_second(@@computer, x)
+       update
+     end
+
      while i <= 4
        puts "Player's turn:"
        x = good_to_take
@@ -103,11 +111,11 @@ require 'colorize'
        i += 1
      end
      end
-     if x != "exit"
+     if x != "exit" && decide == "player1"
      puts "Player's turn:"
      turn_first(@@player1, good_to_take)
      update
-   else 
+   else
    end
    end
  end
