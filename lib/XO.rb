@@ -76,13 +76,28 @@ require 'colorize'
    # method to announce if you win/lose/draw
    def check
      if check_if_win(@@player1)
-       puts "YOU WON!"
+       for i in 1..13 do
+         system "clear"
+        puts $tic_tac_toe_table
+        puts i % 2 == 0 ? "   YOU WON!".colorize(:green) : "   YOU WON!".colorize(:red)
+        sleep(0.5)
+       end
      elsif check_if_win(@@computer)
-       puts "COMPUTER WON!"
+       for i in 1..13 do
+         system "clear"
+        puts $tic_tac_toe_table
+        puts i % 2 == 0 ? "COMPUTER WON!".colorize(:green) : "COMPUTER WON!".colorize(:red)
+        sleep(0.5)
+       end
      elsif @@x == "exit" && @@common.count <= 9
        puts " "
      else
-       puts "IT'S A DRAW!"
+       for i in 1..13 do
+         system "clear"
+        puts $tic_tac_toe_table
+        puts i % 2 == 0 ? "IT'S A DRAW!".colorize(:green) : "IT'S A DRAW!".colorize(:red)
+        sleep(0.5)
+       end
      end
    end
 
@@ -92,8 +107,10 @@ require 'colorize'
        $moves[:exit]
      elsif @@common.count == 0
        ($moves.keys - [:exit, :top_mid, :mid_left, :mid_right, :bottom_mid]).sample.to_s
+     elsif [:top_right, :top_left, :bottom_right, :bottom_left].include?(@@x) && ($moves.keys - @@common).include?(:mid_mid)
+       $moves[:mid_mid]
      else
-       ($moves.keys - @@common - [:exot]).sample.to_s
+       ($moves.keys - @@common - [:exit]).sample.to_s
      end
    end
    # game run
