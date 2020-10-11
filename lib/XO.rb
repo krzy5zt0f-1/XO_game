@@ -2,24 +2,30 @@
 require "terminal-table"
 # gem extension to colour X's and O's
 require 'colorize'
-  # grid to be used
-  $rows = [[" ", " ", " "], :separator, [" ", " ", " "],
-  :separator, [" ", " ", " "]]
-  $tic_tac_toe_table = Terminal::Table.new :rows => $rows
+# grid to be used
+$rows = [[" ", " ", " "], :separator, [" ", " ", " "],
+:separator, [" ", " ", " "]]
+$tic_tac_toe_table = Terminal::Table.new :rows => $rows
 
-  # hahs with locations on a grid
-  $moves = { top_left: $rows[0][0], top_mid: $rows[0][1], top_right: $rows[0][2],
-           mid_left: $rows[2][0], mid_mid: $rows[2][1], mid_right: $rows[2][2],
-          bottom_left: $rows[4][0], bottom_mid: $rows[4][1], bottom_right: $rows[4][2],
-          exit: "exit" }
+# hash with locations on a grid
+$moves = { top_left: $rows[0][0], top_mid: $rows[0][1], top_right: $rows[0][2],
+         mid_left: $rows[2][0], mid_mid: $rows[2][1], mid_right: $rows[2][2],
+        bottom_left: $rows[4][0], bottom_mid: $rows[4][1], bottom_right: $rows[4][2],
+        exit: "exit" }
 
-
+  # method to lear changes to above global variables
+  def clean
+    $rows = [[" ", " ", " "], :separator, [" ", " ", " "],
+    :separator, [" ", " ", " "]]
+    $tic_tac_toe_table = Terminal::Table.new :rows => $rows
+  end
 # Class that defines and runs a game for PvC
  class Game
-
-     @@player1 = []
-     @@computer = []
-     @@common = []
+   def initialize
+     @player1 = []
+     @computer = []
+     @common = []
+   end
    def check_if_win(player)
      if player.include?("top_left") && player.include?("top_mid") && player.include?("top_right")
        true
@@ -44,20 +50,20 @@ require 'colorize'
    # method to make a turn for X
   def turn_first(player, input)
      player << input
-     @@common << input.to_sym
+     @common << input.to_sym
     $moves[input.to_sym].insert(0, "X".colorize(:red)).delete!(" ")
    end
    # method to make a turn for O
   def turn_second(player, input)
      player << input
-     @@common << input.to_sym
+     @common << input.to_sym
     $moves[input.to_sym].insert(0, "O".colorize(:green)).delete!(" ")
    end
    # method to pass only clear cells
    def good_to_take
      loop do
        input = gets.strip
-       if ($moves.keys - @@common).include?(input.to_sym)
+       if ($moves.keys - @common).include?(input.to_sym)
          return input
          break
        end
@@ -74,21 +80,21 @@ require 'colorize'
    end
    # method to announce if you win/lose/draw
    def check
-     if check_if_win(@@player1)
+     if check_if_win(@player1)
        for i in 1..13 do
          system "clear"
         puts $tic_tac_toe_table
         puts i % 2 == 0 ? "   YOU WON!".colorize(:red) : "   YOU WON!".colorize(:green)
         sleep(0.5)
        end
-     elsif check_if_win(@@computer)
+     elsif check_if_win(@computer)
        for i in 1..13 do
          system "clear"
         puts $tic_tac_toe_table
         puts i % 2 == 0 ? "COMPUTER WON!".colorize(:green) : "COMPUTER WON!".colorize(:red)
         sleep(0.5)
        end
-     elsif @@x == "exit" && @@common.count <= 9
+     elsif @@x == "exit" && @common.count <= 9
        puts " "
      else
        for i in 1..13 do
@@ -99,17 +105,17 @@ require 'colorize'
        end
      end
    end
-
+   # method to clear the state of the rows before a new game
    # method to define behaviour of AI
    def ai
-     if @@common.count == 9
+     if @common.count == 9
        $moves[:exit]
-     elsif @@common.count == 0
+     elsif @common.count == 0
        ($moves.keys - [:exit, :top_mid, :mid_left, :mid_right, :bottom_mid]).sample.to_s
-     elsif [:top_right, :top_left, :bottom_right, :bottom_left].include?(@@x) && ($moves.keys - @@common).include?(:mid_mid)
+     elsif [:top_right, :top_left, :bottom_right, :bottom_left].include?(@@x) && ($moves.keys - @common).include?(:mid_mid)
        $moves[:mid_mid]
      else
-       ($moves.keys - @@common - [:exit]).sample.to_s
+       ($moves.keys - @common - [:exit]).sample.to_s
      end
    end
    # game run
@@ -122,85 +128,28 @@ require 'colorize'
        puts "Computer's turn"
        @@x = ai
        sleep(1)
-       turn_second(@@computer, @@x)
+       turn_second(@computer, @@x)
        update
      end
-     while @@common.count <= 8
+     while @common.count <= 8
        puts "Player's turn:"
        @@x = good_to_take
        if @@x == "exit"
          break
        else
-       turn_first(@@player1, @@x)
+       turn_first(@player1, @@x)
        update
-       break if check_if_win(@@player1)
+       break if check_if_win(@player1)
        puts "Computer's turn:"
        @@x = ai
        sleep(1)
-       turn_second(@@computer, @@x)
+       turn_second(@computer, @@x)
        update
-       break if check_if_win(@@computer)
+       break if check_if_win(@computer)
      end
      end
      check
    end
  end
 
-# class that holds a front screen animation
-
-class Animation
-def front
-  for i in 1..13 do
-   system "clear"
-   puts i % 2 == 0 ? File.read(File.dirname(__FILE__) + '/front0.txt').colorize(:red) : File.read(File.dirname(__FILE__) + '/front0.txt').colorize(:green)
-   sleep(0.5)
-  end
-end
-def back
-
-end
-end
-
-# class to hold game menu
-
-class Menu
-def initialize
-  @g = Game.new
-  @a = Animation.new
-  menu
-end
-# choices of Menu
-def process(selection)
-  case selection
-  when "1"
-    puts "You'r goal is to cross three cells in vertical, horizontal"
-    puts "or diagonal direction."
-    puts "To play, just input which cell you would like to cross and hit return."
-    puts "For example, `top_left` will mark top left corner of a grid, `mid_mid`"
-    puts "will mark the middle, `bottom_right` will mark bottom right corner etc."
-    puts " To exit a current game just type in `exit` and hit return."
-  when "2"
-    @g.game_run
-  when "3"
-    exit
-  else
-    puts "I don't know what you meant, try again"
-  end
-end
-def menu_options
-  puts "--------------------------------------------------"
-  puts "1. Game instructions [press: 1]"
-  puts "2. Start game [press: 2]"
-  puts "3. Exit [press 3]"
-end
-def menu
-  @a.front
-  sleep (1)
-  loop do
-    menu_options
-    process(STDIN.gets.strip)
-  end
-end
-end
-
-t= Menu.new
+Game.new.game_run
