@@ -174,11 +174,11 @@ def process(selection)
   case selection
   when "1"
     puts "You'r goal is to cross three cells in vertical, horizontal"
-    puts "diagonal direction."
+    puts "or diagonal direction."
     puts "To play, just input which cell you would like to cross and hit return."
-    puts "For example, `to_left` will mark top left corner of a grid, `mid_mid`"
+    puts "For example, `top_left` will mark top left corner of a grid, `mid_mid`"
     puts "will mark the middle, `bottom_right` will mark bottom right corner etc."
-    puts " To exit a current game just type in `exit and hit return.`"
+    puts " To exit a current game just type in `exit` and hit return."
   when "2"
     @g.game_run
   when "3"
