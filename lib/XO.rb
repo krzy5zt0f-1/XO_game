@@ -46,13 +46,13 @@ require 'colorize'
   def turn_first(player, input)
      player << input
      @@common << input.to_sym
-    $moves[input.to_sym].insert(0, "X").delete!(" ")
+    $moves[input.to_sym].insert(0, "X".colorize(:red)).delete!(" ")
    end
    # method to make a turn for O
   def turn_second(player, input)
      player << input
      @@common << input.to_sym
-    $moves[input.to_sym].insert(0, "O").delete!(" ")
+    $moves[input.to_sym].insert(0, "O".colorize(:green)).delete!(" ")
    end
    # method to pass only clear cells
    def good_to_take
@@ -68,9 +68,6 @@ require 'colorize'
    def update
      system "clear"
      puts $tic_tac_toe_table
-     puts "#{check_if_win(@@player1)}:" + "player win?"
-     puts "#{check_if_win(@@computer)}:" + "computer win?"
-     puts @@common.count
    end
 
    def who_starts?
