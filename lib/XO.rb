@@ -90,8 +90,10 @@ require 'colorize'
    def ai
      if @@common.count == 9
        $moves[:exit]
+     elsif @@common.count == 0
+       ($moves.keys - [:exit, :top_mid, :mid_left, :mid_right, :bottom_mid]).sample.to_s
      else
-       ($moves.keys - @@common - [:exit]).sample.to_s
+       ($moves.keys - @@common - [:exot]).sample.to_s
      end
    end
    # game run
