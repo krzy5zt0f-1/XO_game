@@ -79,7 +79,7 @@ require 'colorize'
        for i in 1..13 do
          system "clear"
         puts $tic_tac_toe_table
-        puts i % 2 == 0 ? "   YOU WON!".colorize(:green) : "   YOU WON!".colorize(:red)
+        puts i % 2 == 0 ? "   YOU WON!".colorize(:red) : "   YOU WON!".colorize(:green)
         sleep(0.5)
        end
      elsif check_if_win(@@computer)
@@ -147,7 +147,17 @@ require 'colorize'
    end
  end
 
-
-
-h = Game.new
-h.game_run
+# class that holds a front screen and a back screen
+class Animations
+def front
+  i = 0
+  while i < 11 do
+    system "clear"
+    File.foreach("front#{i % 2}.txt") { |frame| puts frame.colorize(:red) }
+    sleep(0.5)
+    i += 1
+   end
+end
+end
+h = Animations.new
+h.front
