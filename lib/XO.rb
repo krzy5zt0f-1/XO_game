@@ -68,7 +68,9 @@ require 'colorize'
    def update
      system "clear"
      puts $tic_tac_toe_table
-     print ($moves.keys - @@common)
+     puts "#{check_if_win(@@player1)}:" + "player win?"
+     puts "#{check_if_win(@@computer)}:" + "computer win?"
+     puts @@common.count
    end
 
    def who_starts?
@@ -96,7 +98,7 @@ require 'colorize'
        update
      end
 
-     while i <= 4
+     while @@common.count <= 8
        puts "Player's turn:"
        x = good_to_take
        if x == "exit"
@@ -104,19 +106,14 @@ require 'colorize'
        else
        turn_first(@@player1, x)
        update
+       break if check_if_win(@@player1)
        puts "Computer's turn:"
        x = good_to_take
        turn_second(@@computer, x)
        update
-       i += 1
+       break if check_if_win(@@computer)
      end
      end
-     if x != "exit" && decide == "player1"
-     puts "Player's turn:"
-     turn_first(@@player1, good_to_take)
-     update
-   else
-   end
    end
  end
 
