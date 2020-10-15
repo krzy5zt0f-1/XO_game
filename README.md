@@ -10,6 +10,6 @@ Before runnig it, you will have to install following gems:
     
 ## How to use: ##
 
-Once you have installed the gems and forked the repo, from the directory run:
+Once you have installed the gems and forked the repo, from the directory in ```/lib/``` run:
 
-    ruby ./lib/game.rb
+    ruby game.rb
