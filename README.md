@@ -12,4 +12,4 @@ Before runnig it, you will have to install following gems:
 
 Once you have installed the gems and forked the repo, from the directory run:
 
-    ruby game.rb
+    ruby ./lib/game.rb
